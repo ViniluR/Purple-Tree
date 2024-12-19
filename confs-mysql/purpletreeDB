@@ -1,0 +1,34 @@
+CREATE TABLE Usuário (
+  username VARCHAR(255) NOT NULL,
+  nome VARCHAR(255) NOT NULL,
+  senha VARCHAR(255) NOT NULL,
+  biografia TEXT NOT NULL,
+  PRIMARY KEY (username)
+);
+
+CREATE TABLE segue (
+  username_1 VARCHAR(255) NOT NULL,
+  segueusername_2 VARCHAR(255) NOT NULL,
+  PRIMARY KEY (username_1, segueusername_2),
+  FOREIGN KEY (username_1) REFERENCES Usuário(username),
+  FOREIGN KEY (segueusername_2) REFERENCES Usuário(username)
+);
+
+CREATE TABLE Post (
+  conteúdo TEXT NOT NULL,
+  fixado BOOLEAN NOT NULL,
+  id INT NOT NULL AUTO_INCREMENT,
+  username VARCHAR(255) NOT NULL,
+  contém_id INT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (username) REFERENCES Usuário(username),
+  FOREIGN KEY (contém_id) REFERENCES Post(id)
+);
+
+CREATE TABLE curte (
+  username VARCHAR(255) NOT NULL,
+  id INT NOT NULL,
+  PRIMARY KEY (username, id),
+  FOREIGN KEY (username) REFERENCES Usuário(username),
+  FOREIGN KEY (id) REFERENCES Post(id)
+);
