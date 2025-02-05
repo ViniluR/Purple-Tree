@@ -20,15 +20,8 @@
             <h3 id="nome">Carregando...</h3>
             <div>
                 <ul>
-                    <li>
-                        <span>Foto de perfil:</span>
-                        <img id="foto_perfil" src="media/placeholderperfil.png" width="200">
-                    </li>
-                    <li><span>Username:</span> <span id="username">-</span></li>
+                    <li><span>Username:</span> <span style='color:#50b110' id="username">-</span></li>
                     <li><span>Biografia:</span> <span id="biografia">-</span></li>
-                    <li><span>Quant. Seguidores:</span> <span id="seguidores">0</span></li>
-                    <li><span>Quant. Seguindo:</span> <span id="seguindo">0</span></li>
-                    <li><span>Quant. Postagens:</span> <span id="postagens">0</span></li>
                 </ul>
             </div>
         </section>
@@ -51,12 +44,8 @@
                         document.body.innerHTML = `<h3>${data.error}</h3>`;
                     } else {
                         document.getElementById("nome").textContent = data.nome;
-                        document.getElementById("foto_perfil").src = data.foto_perfil || "media/placeholderperfil.png";
-                        document.getElementById("username").textContent = data.username;
+                        document.getElementById("username").textContent = `@${data.username}`;
                         document.getElementById("biografia").textContent = data.biografia || "Sem biografia";
-                        document.getElementById("seguidores").textContent = data.seguidores || 0;
-                        document.getElementById("seguindo").textContent = data.seguindo || 0;
-                        document.getElementById("postagens").textContent = data.postagens || 0;
                     }
                 })
                 .catch(error => console.error("Erro ao carregar usuário:", error));

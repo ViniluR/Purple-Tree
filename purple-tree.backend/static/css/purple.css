@@ -545,12 +545,6 @@ h3.username-grande {
     margin: 2em 0;
 }
 
-.UserRead ul li:nth-child(1) {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-}
-
 .UserRead ul span, .PostRead ul span {
     font-weight: bold;
 }
@@ -590,4 +584,26 @@ h3.username-grande {
 .posts ul li a:nth-child(2){
     background-color: #A70909;
     border: #A70909;
+}
+
+.edit-user input, .edit-user textarea{
+    background-color: #110A29;
+    max-width: 640px;
+    border: none;
+    outline: none;
+    padding: .4em 1em;
+    border-radius: 20px;
+    margin: .5em 0;
+    box-sizing: border-box;
+}
+
+#confirm-delete, #cancel-delete{
+    border-radius: 20px;
+    margin-top: 1em;
+    padding: .25em 1.2em;
+    font-size: 16px;
+}
+
+input#username{
+    color:#4c4857;
 }
