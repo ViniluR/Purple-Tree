@@ -2,7 +2,7 @@ CREATE TABLE Usuario (
   username VARCHAR(20) NOT NULL,
   nome VARCHAR(30) NOT NULL,
   senha VARCHAR(300) NOT NULL,
-  biografia VARCHAR(500) NOT NULL,
+  biografia VARCHAR(500),
   PRIMARY KEY (username)
 );
 
@@ -10,8 +10,8 @@ CREATE TABLE segue (
   username_1 VARCHAR(20) NOT NULL,
   segueusername_2 VARCHAR(20) NOT NULL,
   PRIMARY KEY (username_1, segueusername_2),
-  FOREIGN KEY (username_1) REFERENCES Usuario(username),
-  FOREIGN KEY (segueusername_2) REFERENCES Usuario(username)
+  FOREIGN KEY (username_1) REFERENCES Usuario(username) on DELETE CASCADE,
+  FOREIGN KEY (segueusername_2) REFERENCES Usuario(username) on DELETE CASCADE
 );
 
 CREATE TABLE Post (
@@ -21,14 +21,14 @@ CREATE TABLE Post (
   username VARCHAR(20) NOT NULL,
   id_postcomentado INT,
   PRIMARY KEY (id),
-  FOREIGN KEY (username) REFERENCES Usuario(username),
-  FOREIGN KEY (contém_id) REFERENCES Post(id)
+  FOREIGN KEY (username) REFERENCES Usuario(username) on DELETE CASCADE,
+  FOREIGN KEY (contém_id) REFERENCES Post(id) on DELETE CASCADE
 );
 
 CREATE TABLE curte (
   username VARCHAR(20) NOT NULL,
   id INT NOT NULL,
   PRIMARY KEY (username, id),
-  FOREIGN KEY (username) REFERENCES Usuario(username),
-  FOREIGN KEY (id) REFERENCES Post(id)
+  FOREIGN KEY (username) REFERENCES Usuario(username) on DELETE CASCADE,
+  FOREIGN KEY (id) REFERENCES Post(id) on DELETE CASCADE
 );
