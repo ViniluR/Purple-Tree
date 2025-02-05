@@ -17,9 +17,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $conteudo = mysqli_real_escape_string($c, $conteudo);
 
     if ($post_pai == '') {
-        $postar = "insert into Post(fixado, conteudo, username)  values (0, '$conteudo', '$username')";
+        $postar = "insert into Post(conteudo, username)  values ('$conteudo', '$username')";
     } else {
-        $postar = "insert into Post(fixado, conteudo, username, id_postcomentado)  values (0, '$conteudo', '$username', $post_pai)";
+        $postar = "insert into Post(conteudo, username, id_postcomentado)  values ('$conteudo', '$username', $post_pai)";
     }
 
     if(mysqli_query($c, $postar)) {

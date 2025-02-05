@@ -99,16 +99,16 @@
                     <h3 class='username-grande'>@{$user['username']}</h3>";
 
                     if (!isset($_SESSION['username'])) {
-                        echo "<a href='login.php' id='nao_segue btn-segue'>Seguir</a>";
+                        echo "<a href='login.php' id='btn-segue' style='color: #110A29;' class='seguir'>Seguir</a>";
                     } else {
                         if ($username != $username_sessao){
                             $ja_segue = "SELECT count(*) as count from segue where username_1 = '$username_sessao' AND segueusername_2 = '$username'";
                             $ja_segue = mysqli_query($c, $ja_segue);
                             $ja_segue = mysqli_fetch_assoc($ja_segue);
                             if ($ja_segue['count']){
-                                echo "<a href='back/back-seguir.php?id1={$username_sessao}&id2={$username}' id='ja_segue btn-segue'>Seguindo</a>";
+                                echo "<a href='back/back-seguir.php?id1={$username_sessao}&id2={$username}' id='btn-segue'>Seguindo</a>";
                             } else {
-                                echo "<a href='back/back-seguir.php?id1={$username_sessao}&id2={$username}' id='nao_segue btn-segue'>Seguir</a>";
+                                echo "<a href='back/back-seguir.php?id1={$username_sessao}&id2={$username}' id='btn-segue' style='color: #110A29;' class='seguir'>Seguir</a>";
                             }
                         }
                     }

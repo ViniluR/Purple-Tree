@@ -437,3 +437,23 @@ h3.username-grande {
     font-weight: 500;
     margin: 2px 0 0;
 }
+
+/* ajeitando bugs */
+
+#btn-segue{
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: .25em 1.2em;
+    border: 1px solid #F5EFFF;
+    text-decoration: none;
+    color: #F5EFFF;
+    border-radius: 20px;
+}
+a.seguir{
+    background-color: #F5EFFF;
+    border: 1px #110A29 solid;
+    color:#110A29;
+}
+
+/* -------------------------- */

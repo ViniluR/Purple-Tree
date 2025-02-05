@@ -75,7 +75,7 @@
             		else { $comments = ''; }
 
 					if (isset($_SESSION['username'])) {
-                        $sql_arquivo = "SELECT count(*) as count from curte WHERE username = '$username_sessao' AND id = '$post[id]'";
+                        $sql_arquivo = "SELECT count(*) as count from curte WHERE username = '$username_sessao' AND id = '$post_pai[id]'";
                         $arquivo_like = mysqli_query($c, $sql_arquivo);
                         $arquivo_like = mysqli_fetch_assoc($arquivo_like);
             

@@ -74,6 +74,7 @@ $id = $_GET['id'];
                 $id_pai = $post_pai['id_postcomentado'];
                 
                 $username = $post_pai['username'];
+                $username_sessao = $_SESSION['username'];
                 $pegar_user = "SELECT * from Usuario WHERE username = '$username'";
                 $lista_user = mysqli_query($c, $pegar_user);
                 $user = mysqli_fetch_assoc($lista_user);
@@ -93,7 +94,7 @@ $id = $_GET['id'];
                 else { $comments = ''; }
 
                 if (isset($_SESSION['username'])) {
-                    $sql_arquivo = "SELECT count(*) as count from curte WHERE username = '$username_sessao' AND id = '$post[id]'";
+                    $sql_arquivo = "SELECT count(*) as count from curte WHERE username = '$username_sessao' AND id = '$post_pai[id]'";
                     $arquivo_like = mysqli_query($c, $sql_arquivo);
                     $arquivo_like = mysqli_fetch_assoc($arquivo_like);
         
@@ -135,7 +136,7 @@ $id = $_GET['id'];
                         <div>";
                     if (isset($_SESSION['username'])){
                         echo "
-                            <button class='like-btn' data-id='{$post['id']}'><img width='20' src='../media/{$arquivo_like}.svg'></button>
+                            <button class='like-btn' data-id='{$post_pai['id']}'><img width='20' src='../media/{$arquivo_like}.svg'></button>
                         ";
                     } else {
                         echo "
@@ -164,6 +165,7 @@ $id = $_GET['id'];
 // ---------------------------------- post da página ----------------------------------------------
 
             $username = $post['username'];
+            $username_sessao = $_SESSION['username'];
             $pegar_user = "SELECT * from Usuario WHERE username = '$username'";
             $lista_user = mysqli_query($c, $pegar_user);
             $user = mysqli_fetch_assoc($lista_user);
@@ -279,7 +281,7 @@ $id = $_GET['id'];
                 else { $comments = ''; }
 
                 if (isset($_SESSION['username'])) {
-                    $sql_arquivo = "SELECT count(*) as count from curte WHERE username = '$username_sessao' AND id = '$post[id]'";
+                    $sql_arquivo = "SELECT count(*) as count from curte WHERE username = '$username_sessao' AND id = '$comentario[id]'";
                     $arquivo_like = mysqli_query($c, $sql_arquivo);
                     $arquivo_like = mysqli_fetch_assoc($arquivo_like);
         
