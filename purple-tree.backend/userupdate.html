@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/purple.css">
+    <title>Editar Usuário - Admin</title>
+</head>
+
+<body>
+    <header>
+        <div class="header">
+            <h1><a href="index.html"><img src="media/logo.png" alt="Logo"></a></h1>
+        </div>
+    </header>
+
+    <main>
+        <section class="edit-user">
+            <h2>Editar Usuário</h2>
+            <form id="edit-user-form">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" readonly>
+
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+
+                <label for="biografia">Biografia:</label>
+                <textarea id="biografia" name="biografia" rows="4"></textarea>
+
+                <button type="submit">Salvar</button>
+            </form>
+            <p id="mensagem"></p>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            const username = params.get("username");
+
+            if (username) {
+                fetch(`http://purple-tree.backend.biz/php/usuario/get_user.php?username=${username}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            document.getElementById("mensagem").textContent = data.error;
+                        } else {
+                            document.getElementById("username").value = data.username;
+                            document.getElementById("nome").value = data.nome;
+                            document.getElementById("biografia").value = data.biografia || "";
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Erro ao carregar usuário:", error);
+                        document.getElementById("mensagem").textContent = "Erro ao carregar usuário.";
+                    });
+            }
+        });
+
+        document.getElementById("edit-user-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+            fetch("http://purple-tree.backend.biz/php/usuario/update.php", {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("mensagem").textContent = data.success || data.error;
+                })
+                .catch(error => {
+                    console.error("Erro ao atualizar usuário:", error);
+                    document.getElementById("mensagem").textContent = "Erro ao atualizar usuário.";
+                });
+        });
+    </script>
+</body>
+
+</html>
