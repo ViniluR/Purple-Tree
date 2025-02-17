@@ -21,7 +21,7 @@ CREATE TABLE Post (
   id_postcomentado INT,
   PRIMARY KEY (id),
   FOREIGN KEY (username) REFERENCES Usuario(username) on DELETE CASCADE,
-  FOREIGN KEY (contém_id) REFERENCES Post(id) on DELETE CASCADE
+  FOREIGN KEY (id_postcomentado) REFERENCES Post(id) on DELETE CASCADE
 );
 
 CREATE TABLE curte (
