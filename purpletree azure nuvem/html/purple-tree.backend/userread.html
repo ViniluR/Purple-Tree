@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/purple.css">
+    <title>Perfil do Usuário - Purple Tree</title>
+</head>
+
+<body>
+    <header>
+        <div class="header">
+            <h1><a href="index.html"><img src="media/logo.png" alt="Logo"></a></h1>
+        </div>
+    </header>
+
+    <main>
+        <section class="UserRead">
+            <h3 id="nome">Carregando...</h3>
+            <div>
+                <ul>
+                    <li><span>Username:</span> <span style='color:#50b110' id="username">-</span></li>
+                    <li><span>Biografia:</span> <span id="biografia">-</span></li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            const username = params.get("username");
+
+            if (!username) {
+                document.body.innerHTML = "<h3>Usuário não especificado</h3>";
+                return;
+            }
+
+            fetch(`http://ics-purpletreeweb.freedynamicdns.net/purple-tree.backend/php/usuario/view_user.php?username=${username}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.body.innerHTML = `<h3>${data.error}</h3>`;
+                    } else {
+                        document.getElementById("nome").textContent = data.nome;
+                        document.getElementById("username").textContent = `@${data.username}`;
+                        document.getElementById("biografia").textContent = data.biografia || "Sem biografia";
+                    }
+                })
+                .catch(error => console.error("Erro ao carregar usuário:", error));
+        });
+    </script>
+
+</body>
+</html>

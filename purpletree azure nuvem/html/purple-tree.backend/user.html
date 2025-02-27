@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/purple.css">
+    <title>Admin - Purple Tree (Users)</title>
+</head>
+
+<body>
+    <header>
+        <div class="header">
+            <h1><a href="index.html"><img src="media/logo.png" alt="Logo"></a></h1>
+        </div>
+    </header>
+
+    <main>
+        <section class="users">
+            <h2>Usuários</h2>
+            <ul id="users-list">
+                <!-- Os usuários serão carregados aqui via JavaScript -->
+            </ul>
+        </section>
+    </main>
+
+    <!-- Modal de Confirmação -->
+    <div id="delete-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <p>Tem certeza de que deseja excluir este usuário?</p>
+            <button id="confirm-delete">Sim, excluir</button>
+            <button id="cancel-delete">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const usersList = document.getElementById("users-list");
+            let userToDelete = null;
+
+            function carregarUsuarios() {
+                fetch("http://ics-purpletreeweb.freedynamicdns.net/purple-tree.backend/php/usuario/read.php")
+                    .then(response => response.json())
+                    .then(data => {
+                        usersList.innerHTML = "";
+
+                        data.forEach(user => {
+                            let li = document.createElement("li");
+                            li.innerHTML = `
+                                <p>${user.username}</p>
+                                <div>
+                                    <a href="userread.html?username=${user.username}">Ver</a>
+                                    <a href="userupdate.html?username=${user.username}">Editar</a>
+                                    <a href="#" class="delete-user" data-username="${user.username}">Excluir</a>
+                                </div>
+                            `;
+                            usersList.appendChild(li);
+                        });
+
+                        document.querySelectorAll(".delete-user").forEach(button => {
+                            button.addEventListener("click", function (event) {
+                                event.preventDefault();
+                                userToDelete = this.getAttribute("data-username");
+                                document.getElementById("delete-modal").style.display = "block";
+                            });
+                        });
+                    })
+                    .catch(error => console.error("Erro ao carregar usuários:", error));
+            }
+
+            document.getElementById("cancel-delete").addEventListener("click", function () {
+                document.getElementById("delete-modal").style.display = "none";
+                userToDelete = null;
+            });
+
+            document.getElementById("confirm-delete").addEventListener("click", function () {
+                if (userToDelete) {
+                    fetch("http://ics-purpletreeweb.freedynamicdns.net/purple-tree.backend/php/usuario/delete.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username: userToDelete })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.success || data.error);
+                            document.getElementById("delete-modal").style.display = "none";
+                            carregarUsuarios();
+                        })
+                        .catch(error => console.error("Erro ao excluir usuário:", error));
+                }
+            });
+
+            carregarUsuarios();
+        });
+    </script>
+
+    <style>
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #171029;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .modal-content button {
+            margin: 5px;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #confirm-delete {
+            background: red;
+            color: white;
+        }
+
+        #cancel-delete {
+            background: gray;
+            color: white;
+        }
+    </style>
+</body>
+
+</html>

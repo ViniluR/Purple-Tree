@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/css/purple.css">
+    <title>Admin - Purple Tree (Posts)</title>
+</head>
+
+<body>
+    <header>
+        <div class="header">
+            <h1><a href="index.html"><img src="media/logo.png" alt="Logo"></a></h1>
+        </div>
+    </header>
+
+    <main>
+        <section class="posts">
+            <h2>Postagens</h2>
+            <ul id="posts-list">
+                <!-- Os posts serão carregados aqui via JavaScript -->
+            </ul>
+        </section>
+    </main>
+
+    <!-- Modal de Confirmação -->
+    <div id="delete-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <p>Tem certeza de que deseja excluir este post?</p>
+            <button id="confirm-delete">Sim, excluir</button>
+            <button id="cancel-delete">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const postsList = document.getElementById("posts-list");
+            let postToDelete = null;
+
+            function carregarPosts() {
+                fetch("http://ics-purpletreeweb.freedynamicdns.net/purple-tree.backend/php/post/list_posts.php")
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Erro HTTP: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        postsList.innerHTML = "";
+
+                        if (data.error) {
+                            console.error("Erro do servidor:", data.error);
+                            postsList.innerHTML = `<li>Erro ao carregar postagens: ${data.error}</li>`;
+                            return;
+                        }
+
+                        data.forEach(post => {
+                            let li = document.createElement("li");
+                            li.innerHTML = `
+                                <p>ID: ${post.id} - ${post.conteudo} - ${post.username}</p>
+                                <div>
+                                    <a href="postread.html?id=${post.id}">Ver</a>
+                                    <a href="#" class="delete-post" data-id="${post.id}">Excluir</a>
+                                </div>
+                            `;
+                            postsList.appendChild(li);
+                        });
+
+                        document.querySelectorAll(".delete-post").forEach(button => {
+                            button.addEventListener("click", function (event) {
+                                event.preventDefault();
+                                postToDelete = this.getAttribute("data-id");
+                                document.getElementById("delete-modal").style.display = "block";
+                            });
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Erro ao carregar postagens:", error);
+                        postsList.innerHTML = "<li>Erro ao carregar postagens.</li>";
+                    });
+            }
+
+            document.getElementById("cancel-delete").addEventListener("click", function () {
+                document.getElementById("delete-modal").style.display = "none";
+                postToDelete = null;
+            });
+
+            document.getElementById("confirm-delete").addEventListener("click", function () {
+                if (postToDelete) {
+                    fetch("http://ics-purpletreeweb.freedynamicdns.net/purple-tree.backend/php/post/delete.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ id: postToDelete })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.success || data.error);
+                            document.getElementById("delete-modal").style.display = "none";
+                            carregarPosts();
+                        })
+                        .catch(error => console.error("Erro ao excluir post:", error));
+                }
+            });
+
+            carregarPosts();
+        });
+    </script>
+
+    <style>
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #171029;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .modal-content button {
+            margin: 5px;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #confirm-delete {
+            background: red;
+            color: white;
+        }
+
+        #cancel-delete {
+            background: gray;
+            color: white;
+        }
+    </style>
+</body>
+
+</html>
