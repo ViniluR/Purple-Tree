@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 
-$result = $c->query("SELECT username, nome FROM Usuario");
+$result = $c->query("SELECT username, nome FROM viewUsuarios");
 
 $usuarios = [];
 while ($row = $result->fetch_assoc()) {
