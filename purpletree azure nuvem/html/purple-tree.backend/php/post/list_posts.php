@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 
-$result = $c->query("SELECT id, conteudo, username FROM Post");
+$result = $c->query("SELECT id, conteudo, username FROM viewPosts");
 
 $usuarios = [];
 while ($row = $result->fetch_assoc()) {
